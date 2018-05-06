@@ -2,6 +2,7 @@
 
 import wx
 import os
+from os import path
 from collections import namedtuple
 import  wx.lib.rcsizer  as rcs
 from wordcloud import STOPWORDS
@@ -29,12 +30,13 @@ class MainWindow(wx.Frame):
 
         self.cn_text = None
         self.en_text = None
-        self.mask_path = r"alice_mask.png"
+        cwd = os.getcwd()
+        self.mask_path = path.join(path.abspath(cwd),'alice_mask.png')
         self.user_sw = STOPWORDS
 
         self.lt = layout_template()
         self.name = 'WordCloud draw'
-        self.version = '0.1'
+        self.version = '0.2'
         self.des = '''Draw the word cloud.\n'''
         self.git_website = "https://github.com/WellenWoo/WordCloud_draw"
         self.copyright = "(C) 2018 All Right Reserved"
@@ -58,32 +60,23 @@ class MainWindow(wx.Frame):
         
         """创建输入框"""
         self.in1 = wx.TextCtrl(self,-1,size = (2*s.x,s.y))
-        self.in2 = wx.TextCtrl(self,-1,size = (2*s.x,s.y))
 
         """创建按钮"""
-        b1 = wx.Button(self,-1,'cn text')
+        b1 = wx.Button(self,-1,'text')
         b2 = wx.Button(self, -1, "run")
-        b3 = wx.Button(self,-1,'en text')
-        b4 = wx.Button(self,-1,'run')
 
         """设置输入框的提示信息"""
-        self.in1.SetToolTipString('choose a Chinese text')
-        self.in2.SetToolTipString('choose an English text')
+        self.in1.SetToolTipString('choose a text file')
 
         """界面布局"""
         self.sizer0 = rcs.RowColSizer()
         self.sizer0.Add(b1,row = 1,col = 1)
         self.sizer0.Add(self.in1,row = 1,col = 2)
         self.sizer0.Add(b2,row = 1,col = 3)
-        self.sizer0.Add(b3,row = 2,col = 1)
-        self.sizer0.Add(self.in2,row = 2,col = 2)
-        self.sizer0.Add(b4,row = 2,col = 3)
 
         """绑定回调函数"""
         self.Bind(wx.EVT_BUTTON, self.choose_cn, b1)
         self.Bind(wx.EVT_BUTTON, self.draw_cn, b2)
-        self.Bind(wx.EVT_BUTTON, self.choose_en, b3)        
-        self.Bind(wx.EVT_BUTTON, self.draw_en, b4)
 
         '''菜单绑定函数'''
         self.Bind(wx.EVT_MENU,self.OnExit,menuExit)
@@ -119,16 +112,6 @@ class MainWindow(wx.Frame):
         else:
             self.in1.Clear()
             self.in1.write(self.cn_text)
-
-    def choose_en(self,evt):
-        """Choose an English text file"""
-        self.en_text = None
-        self.en_text = self.choose_file(txtformat)
-        if self.en_text is None:
-            pass
-        else:
-            self.in2.Clear()
-            self.in2.write(self.en_text)
             
     def choose_file(self,wildcard):
         '''choose img'''
@@ -152,14 +135,6 @@ class MainWindow(wx.Frame):
             return None
         else:
             text = wcg.get_text_cn(self.cn_text)
-            wcg.draw_wc(text,self.mask_path,self.user_sw)
-
-    def draw_en(self,evt):
-        if self.en_text is None:
-            self.raise_msg(u'plaese Choose an English text file first.')
-            return None
-        else:
-            text = wcg.get_text(self.en_text)
             wcg.draw_wc(text,self.mask_path,self.user_sw)
 
     def raise_msg(self,msg):
