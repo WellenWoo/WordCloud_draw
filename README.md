@@ -7,8 +7,8 @@
 python2.7 + jieba + wordcloud + numpy1.11 +PIL1.1.7 +wxPython2.8
 
 效果如图：
-```
+
 ![中文文档](images/cn.jpg)
 
 ![英文文档](images/en.jpg)
-```
+
