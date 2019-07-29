@@ -9,6 +9,7 @@ from wordcloud import STOPWORDS
 
 from utility_template import layout_template
 import wordcloud_gen as wcg
+import wx.lib.agw.gradientbutton as gbtn
 
 __author__ = 'WellenWoo'
 __mail__ = 'wellenwoo@163.com'
@@ -62,8 +63,8 @@ class MainWindow(wx.Frame):
         self.in1 = wx.TextCtrl(self,-1,size = (2*s.x,s.y))
 
         """创建按钮"""
-        b1 = wx.Button(self,-1,'text')
-        b2 = wx.Button(self, -1, "run")
+        b1 = gbtn.GradientButton(self, -1, label = "text")
+        b2 = gbtn.GradientButton(self, -1, label = "run")
 
         """设置输入框的提示信息"""
         self.in1.SetToolTipString('choose a text file')
