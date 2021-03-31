@@ -6,6 +6,7 @@ from os import path
 from collections import namedtuple
 import  wx.lib.rcsizer  as rcs
 from wordcloud import STOPWORDS
+from wx import adv
 
 from utility_template import layout_template
 import wordcloud_gen as wcg
@@ -121,7 +122,10 @@ class MainWindow(wx.Frame):
             defaultDir=os.getcwd(), 
             defaultFile="",
             wildcard=wildcard,
-            style=wx.OPEN | wx.MULTIPLE | wx.CHANGE_DIR
+#            style=wx.OPEN | wx.MULTIPLE | wx.CHANGE_DIR #wx2.8
+            style = wx.FD_OPEN | wx.FD_MULTIPLE |     #wx4.0
+                    wx.FD_CHANGE_DIR | wx.FD_FILE_MUST_EXIST |
+                    wx.FD_PREVIEW
             )
         if dlg.ShowModal() == wx.ID_OK:
             paths = dlg.GetPaths()
@@ -140,16 +144,19 @@ class MainWindow(wx.Frame):
 
     def raise_msg(self,msg):
         '''add the warning message'''
-        info = wx.AboutDialogInfo()
+#        info = wx.AboutDialogInfo() #wx2.8
+        info = adv.AboutDialogInfo() #wx4.0
         info.Name = "Warning Message"
         info.Copyright = msg
-        wx.AboutBox(info)
+#        wx.AboutBox(info) wx2.8
+        adv.AboutBox(info) #wx4.0
 
     def OnAbout(self, evt):
         info = self.lt.About_info(self.name,self.version,self.copyright,
                                   self.des,self.git_website,
                                   __author__+'\n'+__mail__,wx.ClientDC(self))    
-        wx.AboutBox(info)
+#        wx.AboutBox(info) wx2.8
+        adv.AboutBox(info) #wx4.0
         
     def OnExit(self,event):
         """退出函数"""
